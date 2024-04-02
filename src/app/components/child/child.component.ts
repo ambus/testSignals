@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { HighlightDirective } from '../../directives/highlight/highlight.directive';
 import { CounterService } from '../../services/counter.service';
 import { CounterComponent } from '../counter/counter.component';
@@ -17,7 +17,7 @@ import { CounterComponent } from '../counter/counter.component';
       <mtap-counter title="Signal" [count]="signal()" />
       <mtap-counter title="Prop" [count]="prop" />
 
-      @if (depth === 1) {
+      @if (depth() === 1) {
         <mtap-counter title="Service Prop" [count]="(counterService.servicePropStream | async) || 0" />
         <mtap-counter title="From service" [count]="counterService.counter()" />
       }
@@ -29,16 +29,16 @@ import { CounterComponent } from '../counter/counter.component';
     } @else {
       <button class="btn mb-4 mr-2" (click)="stop()">Stop increment on interval</button>
     }
-    @if (depth === 0) {
+    @if (depth() === 0) {
       <button class="btn mb-4 mr-2" (click)="counterService.incrementServiceProp()">Increment prop (service)</button>
       <button class="btn mb-4 mr-2" (click)="counterService.increment()">Increment (service)</button>
     }
-    @if (depth > 1) {
-      <mtap-child [depth]="depth - 1" />
+    @if (depth() > 1) {
+      <mtap-child [depth]="depth() - 1" />
     } `,
 })
 export class ChildComponent {
-  @Input() depth = 0;
+  depth = input<number>(0);
 
   private highlight = inject(HighlightDirective);
 
